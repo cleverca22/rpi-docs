@@ -15,6 +15,68 @@
   </cpu>
   <peripherals>
     <peripheral>
+      <name>clocks_main</name>
+      <baseAddress>0x40018000</baseAddress>
+      <description>the main clock controller</description>
+      <addressBlock>
+        <offset>0</offset>
+        <size>0x1000</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <addressOffset>0x021c</addressOffset>
+          <name>FC0_REF_KHZ</name>
+          <description>the rate of clk_slow_sys in khz (currently, 50mhz)</description>
+        </register>
+        <register>
+          <addressOffset>0x0220</addressOffset>
+          <name>FC0_MIN_KHZ</name>
+          <description>linux sets this to 0</description>
+        </register>
+        <register>
+          <addressOffset>0x0224</addressOffset>
+          <name>FC0_MAX_KHZ</name>
+          <description>linux sets this to 0x1ffffff</description>
+        </register>
+        <register>
+          <addressOffset>0x0228</addressOffset>
+          <name>FC0_DELAY</name>
+          <description>linux sets this to 7</description>
+        </register>
+        <register>
+          <addressOffset>0x022c</addressOffset>
+          <name>FC0_INTERVAL</name>
+          <description>linux sets this to 8</description>
+        </register>
+        <register>
+          <addressOffset>0x0230</addressOffset>
+          <name>FC0_SRC</name>
+          <description>the clock tap to measure, 0 to disable</description>
+        </register>
+        <register>
+          <addressOffset>0x0234</addressOffset>
+          <name>FC0_STATUS</name>
+          <description>the status of this FC</description>
+          <fields>
+            <field>
+              <bitRange>[8]</bitRange>
+              <name>RUNNING</name>
+            </field>
+            <field>
+              <bitRange>[4]</bitRange>
+              <name>DONE</name>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <addressOffset>0x0238</addressOffset>
+          <name>FC0_RESULT</name>
+          <description>the measured clock</description>
+        </register>
+      </registers>
+    </peripheral>
+    <peripheral>
       <name>UART0</name>
       <baseAddress>0x40030000</baseAddress>
       <addressBlock>
@@ -894,10 +956,178 @@
     <peripheral>
       <baseAddress>0xf0000000</baseAddress>
       <name>PIO</name>
+      <addressBlock>
+        <offset>0</offset>
+        <size>0x1000</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <addressOffset>0x000</addressOffset>
+          <name>PIO_CTRL</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x004</addressOffset>
+          <name>PIO_FSTAT</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x008</addressOffset>
+          <name>PIO_FDEBUG</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x00c</addressOffset>
+          <name>PIO_FLEVEL</name>
+          <description>When joined, the FIFOs maximum level is 16. The levels here read as 15 when the level is 15 or 16.</description>
+        </register>
+        <register>
+          <addressOffset>0x010</addressOffset>
+          <name>PIO_FLEVEL_HI</name>
+          <description>Same layout as FLEVEL, but showing the top bit of the level, so 1 when the level is 16, zero otherwise.</description>
+        </register>
+        <register>
+          <addressOffset>0x014</addressOffset>
+          <name>PIO_TXF0</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x018</addressOffset>
+          <name>PIO_TXF1</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x01c</addressOffset>
+          <name>PIO_TXF2</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x020</addressOffset>
+          <name>PIO_TXF3</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x024</addressOffset>
+          <name>PIO_RXF0</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x028</addressOffset>
+          <name>PIO_RXF1</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x02c</addressOffset>
+          <name>PIO_RXF2</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x030</addressOffset>
+          <name>PIO_RXF3</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x040</addressOffset>
+          <name>PIO_DBG_PADOUT</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x044</addressOffset>
+          <name>PIO_DBG_PADOE</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x048</addressOffset>
+          <name>PIO_DBG_CFGINFO</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x04c</addressOffset>
+          <name>PIO_INSTR_MEM0</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0cc</addressOffset>
+          <name>PIO_SM0_CLKDIV</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0d0</addressOffset>
+          <name>PIO_SM0_EXECCTRL</name>
+          <description>Bit 5 (reserved in RP2040) is settable, but has unknown function</description>
+        </register>
+        <register>
+          <addressOffset>0x0d4</addressOffset>
+          <name>PIO_SM0_SHIFTCTRL</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0d8</addressOffset>
+          <name>PIO_SM0_ADDR</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0dc</addressOffset>
+          <name>PIO_SM0_INSTR</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0e0</addressOffset>
+          <name>PIO_SM0_PINCTRL</name>
+          <description>.</description>
+        </register>
+        <register>
+          <addressOffset>0x0e4</addressOffset>
+          <name>PIO_SM0_TX_DMA</name>
+          <description>.</description>
+          <fields>
+            <field>
+              <bitRange>[31]</bitRange>
+              <name>Enable DREQ</name>
+            </field>
+            <field>
+              <bitRange>[30]</bitRange>
+              <name>Current DREQ status</name>
+            </field>
+            <field>
+              <bitRange>[10:7]</bitRange>
+              <name>unknown, smaller values make dma faster</name>
+            </field>
+            <field>
+              <bitRange>[4:0]</bitRange>
+              <name>DREQ threshold (DREQ asserted when TX FIFO below this level)</name>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <addressOffset>0x0e8</addressOffset>
+          <name>PIO_SM0_RX_DMA</name>
+          <description>.</description>
+          <fields>
+            <field>
+              <bitRange>[31]</bitRange>
+              <name>Enable DREQ</name>
+            </field>
+            <field>
+              <bitRange>[30]</bitRange>
+              <name>Current DREQ status</name>
+            </field>
+            <field>
+              <bitRange>[10:7]</bitRange>
+              <name>unknown, smaller values make dma faster</name>
+            </field>
+            <field>
+              <bitRange>[4:0]</bitRange>
+              <name>DREQ threshold (DREQ asserted when RX FIFO above this level)</name>
+            </field>
+          </fields>
+        </register>
+      </registers>
     </peripheral>
     <peripheral>
-      <baseAddress>0xf0004000</baseAddress>
       <name>PROC RIO</name>
+      <baseAddress>0xf0004000</baseAddress>
     </peripheral>
   </peripherals>
 </device>

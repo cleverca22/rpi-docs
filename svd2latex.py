@@ -20,8 +20,8 @@ for peri in peripherals.findall("peripheral"):
   name = getStr(peri, "name")
   print(addr)
   print(peri)
-  f.write("{} & TODO & TODO & {}\\\\\n".format(addr, name))
-  f2.write("{} details\\\\\n".format(name))
+  f.write("{} & TODO & TODO & {}\\\\\n".format(addr, latexEscape(name)))
+  f2.write("{} details\\\\\n".format(latexEscape(name)))
   regs = peri.find("registers")
   if regs:
     f2.write("registers\\\\\n")
@@ -30,6 +30,7 @@ for peri in peripherals.findall("peripheral"):
       offset = getStr(reg, "addressOffset")
       name = getStr(reg, "name")
       description = getStr(reg, "description")
+      print(name);
       f2.write("{} & {} & {} \\\\\n".format(offset, latexEscape(name), latexEscape(description)))
     f2.write("\\end{tabular}\n")
 
